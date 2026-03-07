@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: IMDB-MDS
+server:
+  port: 7000
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    csrf:
+      enabled: true
+
+imdb:
+  movies:
+    url: https://datasets.imdbws.com/title.basics/search
+    filename: imdb_top_1000.csv
