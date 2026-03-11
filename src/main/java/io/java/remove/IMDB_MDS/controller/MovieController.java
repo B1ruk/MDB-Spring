@@ -18,7 +18,7 @@ public class MovieController {
         this.movieSearch = movieSearch;
     }
 
-    @PostMapping("/search")
+    @PostMapping("/")
     public List<Movie> movie(@RequestBody SearchQuery searchQuery) {
         return movieSearch.searchMovie(searchQuery);
     }
