@@ -33,7 +33,7 @@ public class SubscriptionFilter extends OncePerRequestFilter {
         var apiKey = request.getHeader("X-API-KEY");
         var user = subscriptionManagement.resolveUser(apiKey);
         if (user.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.setContentType("application/json");
             response.getWriter().write("""
                     User is not found

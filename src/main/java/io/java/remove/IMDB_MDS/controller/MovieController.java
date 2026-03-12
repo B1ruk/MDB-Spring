@@ -3,6 +3,7 @@ package io.java.remove.IMDB_MDS.controller;
 import io.java.remove.IMDB_MDS.model.Movie;
 import io.java.remove.IMDB_MDS.model.SearchQuery;
 import io.java.remove.IMDB_MDS.search.MovieSearch;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,11 +13,8 @@ import java.util.Optional;
 @RequestMapping("/api/v1/search")
 public class MovieController {
 
+    @Autowired
     private MovieSearch movieSearch;
-
-    public MovieController(MovieSearch movieSearch) {
-        this.movieSearch = movieSearch;
-    }
 
     @PostMapping("/")
     public List<Movie> movie(@RequestBody SearchQuery searchQuery) {
