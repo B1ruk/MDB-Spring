@@ -6,6 +6,7 @@ import io.java.remove.IMDB_MDS.processor.MovieProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -56,12 +57,41 @@ public class MovieSearch {
                 .toList();
     }
 
+    public Optional<Movie> searchMovieByHighestRating(SearchQuery searchQuery) {
+        var movies = movieProcessor.loadMovies();
+
+        return movies.stream()
+                .filter(movie -> { // filter by genre
+                    Optional<String> matchByGenere = matchQueryByGenera(searchQuery, movie);
+                    return matchByGenere.isPresent();
+                })
+                .filter(movie -> { // filter by rating
+                    if (Objects.nonNull(searchQuery.rating())) {
+                        double rating = Double.parseDouble(movie.imdbRating());
+                        return rating >= searchQuery.rating();
+                    }
+                    return true;
+                })
+                .max(Comparator.comparingDouble(
+                        movie -> Double.parseDouble(movie.imdbRating())
+                ));
+    }
+
     public Optional<Movie> findMovieByTitle(String title)
     {
         List<Movie> movies = movieProcessor.loadMovies();
 
         return movies.stream()
                 .filter(movie -> movie.seriesTitle().equals(title))
+                .findFirst();
+    }
+
+    public Optional<Movie> findMovieByReleaseYear(String releaseYear)
+    {
+        List<Movie> movies = movieProcessor.loadMovies();
+
+        return movies.stream()
+                .filter(movie -> movie.releasedYear().equals(releaseYear))
                 .findFirst();
     }
 

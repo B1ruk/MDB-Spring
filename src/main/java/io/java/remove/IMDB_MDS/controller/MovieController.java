@@ -27,7 +27,7 @@ public class MovieController {
         return movieSearch.findMovieByTitle(title);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public Optional<Movie> search( @PathVariable Long id){
         return movieSearch.searchByIdAndReleaseYear(id,null);
     }

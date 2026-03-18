@@ -15,3 +15,7 @@ imdb:
   movies:
     url: https://datasets.imdbws.com/title.basics/search
     filename: imdb_top_1000.csv
+
+users:
+  storage:
+    path: ./src/main/resources/data/users.json
