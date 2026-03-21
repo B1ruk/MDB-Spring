@@ -80,7 +80,7 @@ public class UserController {
                 return SubscriptionType.PRO;
             }
             case "PREMIUM" -> {
-                return SubscriptionType.PREMIUM;
+                return SubscriptionType.PREMIUMs;
             }
             default -> {
                 // Try exact enum parsing as a last resort

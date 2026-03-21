@@ -61,7 +61,7 @@ public class UserService {
         var subscription = switch (type) {
             case BASIC -> new Subscription(SubscriptionType.BASIC, 10);
             case PRO -> new Subscription(SubscriptionType.PRO, 1000);
-            case PREMIUM -> new Subscription(SubscriptionType.PREMIUM, Integer.MAX_VALUE);
+            case PREMIUMs -> new Subscription(SubscriptionType.PREMIUMs, Integer.MAX_VALUE);
         };
 
         var user = new User(name, generateApiKey(), email, subscription);
@@ -81,7 +81,7 @@ public class UserService {
         var subscription = switch (type) {
             case BASIC -> new Subscription(SubscriptionType.BASIC, 10);
             case PRO -> new Subscription(SubscriptionType.PRO, 1000);
-            case PREMIUM -> new Subscription(SubscriptionType.PREMIUM, Integer.MAX_VALUE);
+            case PREMIUMs -> new Subscription(SubscriptionType.PREMIUMs, Integer.MAX_VALUE);
         };
 
         var updated = new User(existing.name(), existing.apiKey(), existing.email(), subscription);
@@ -113,7 +113,11 @@ public class UserService {
                 return new ArrayList<>();
             }
             String usersPayloadJson = Files.readString(userStoragePath);
-            return List.of(mapper.readValue(usersPayloadJson, User[].class));
+            // mapper.readValue returns an array; List.of(...) would produce an immutable list
+            // which causes users.add(...) to throw UnsupportedOperationException. Wrap it
+            // in a mutable ArrayList so callers can add/update users safely.
+            User[] arr = mapper.readValue(usersPayloadJson, User[].class);
+            return new ArrayList<>(List.of(arr));
         } catch (IOException e) {
             log.error("Failed to load users from storage", e);
             return new ArrayList<>();

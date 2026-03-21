@@ -1,9 +1,6 @@
 package io.java.remove.IMDB_MDS.subscription;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.java.remove.IMDB_MDS.model.Subscription;
 import io.java.remove.IMDB_MDS.model.SubscriptionHistory;
-import io.java.remove.IMDB_MDS.model.SubscriptionType;
 import io.java.remove.IMDB_MDS.model.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -11,11 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +42,7 @@ public class SubscriptionManagement {
             case BASIC, PRO -> {
                 return requestCount > user.subscription().limit();
             }
-            case PREMIUM -> {
+            case PREMIUMs -> {
                 return false;
             }
             default -> throw new IllegalStateException("Unexpected value: " + user.subscription().subscriptionType());
