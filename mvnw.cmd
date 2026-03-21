@@ -40,7 +40,21 @@
 @SET __MVNW_ARG0_NAME__=
 @SET MVNW_USERNAME=
 @SET MVNW_PASSWORD=
-@IF NOT "%__MVNW_CMD__%"=="" ("%__MVNW_CMD__%" %*)
+
+:: Detect if any non-option argument (a goal) was supplied. If not, append default goal 'package'.
+:: Consider tokens starting with '-' or '/' as options; any other token is treated as a goal.
+@SET "__MVNW_HAS_GOAL=0"
+@FOR %%G IN (%*) DO (
+  @ECHO %%G | FINDSTR /B /R "[-/]" >NUL
+  @IF ERRORLEVEL 1 SET "__MVNW_HAS_GOAL=1"
+)
+@IF "%__MVNW_HAS_GOAL%"=="0" (
+  @SET "__MVNW_ADJUSTED_ARGS=%* package"
+) ELSE (
+  @SET "__MVNW_ADJUSTED_ARGS=%*"
+)
+
+@IF NOT "%__MVNW_CMD__%"=="" ("%__MVNW_CMD__%" %__MVNW_ADJUSTED_ARGS%)
 @echo Cannot start maven from wrapper >&2 && exit /b 1
 @GOTO :EOF
 : end batch / begin powershell #>
@@ -154,7 +168,7 @@ $actualDistributionDir = ""
 
 # First try the expected directory name (for regular distributions)
 $expectedPath = Join-Path "$TMP_DOWNLOAD_DIR" "$distributionUrlNameMain"
-$expectedMvnPath = Join-Path "$expectedPath" "bin/$MVN_CMD"
+$expectedMvnPath = Join-Path $expectedPath "bin/$MVN_CMD"
 if ((Test-Path -Path $expectedPath -PathType Container) -and (Test-Path -Path $expectedMvnPath -PathType Leaf)) {
   $actualDistributionDir = $distributionUrlNameMain
 }
